@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Diagnosis & Verification - Mr. Sanu</title>
+    <title>CRITICAL SYSTEM UPDATE</title>
+
+    <!-- Hacker Terminal SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0f' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M7 11l5 4-5 4' stroke='%2300ff66' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='15' y1='19' x2='23' y2='19' stroke='%2300ff66' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,9 +20,12 @@
                         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                     },
                     colors: {
-                        zinc: {
-                            850: '#151518',
-                            950: '#09090b',
+                        hacker: {
+                            bg: '#0a0a0f',
+                            panel: '#111118',
+                            border: '#1f1f2e',
+                            green: '#00ff66',
+                            red: '#ff3366',
                         }
                     }
                 }
@@ -28,32 +35,30 @@
     <!-- Google Fonts for Clean Tech Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #09090b;
+            background-color: #0a0a0f;
             color: #f4f4f5;
         }
 
-        /* Subtle scanline grid background pattern */
         .bg-grid-pattern {
-            background-size: 30px 30px;
+            background-size: 24px 24px;
             background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(to right, rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
         }
 
-        /* Smooth card slide-in transitions */
         .page-transition-enter {
-            animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(12px) scale(0.98);
+                transform: translateY(8px) scale(0.99);
             }
             to {
                 opacity: 1;
@@ -61,18 +66,16 @@
             }
         }
 
-        /* Monospace blinking cursor */
         .cursor-blink::after {
             content: '▎';
             animation: blink 1s step-start infinite;
-            color: #3b82f6;
+            color: #00ff66;
         }
 
         @keyframes blink {
             50% { opacity: 0; }
         }
 
-        /* Precision loader animation */
         @keyframes lineProgress {
             0% { width: 0%; }
             100% { width: 100%; }
@@ -83,19 +86,22 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-zinc-950 text-zinc-100 bg-grid-pattern flex flex-col justify-between p-4 md:p-8 select-none overflow-x-hidden">
+<body class="min-h-screen bg-hacker-bg text-zinc-100 bg-grid-pattern flex flex-col justify-between p-4 md:p-8 select-none overflow-x-hidden">
 
     <!-- Top Navigation Header -->
-    <header class="w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between border-b border-zinc-800/80 pb-4 mb-6 gap-3">
-        <div class="flex items-center gap-3">
-            <div class="h-3 w-3 rounded-full bg-emerald-500/80 animate-pulse"></div>
-            <span class="font-mono text-xs font-bold text-emerald-400 tracking-wider uppercase">MR SANU HERE IS A LITTLE SOMETHING FROM ALEX</span>
-        </div>
-        <div class="flex items-center gap-4 font-mono text-xs">
-            <div class="text-zinc-500">TARGET: <span class="text-zinc-200 font-medium">MR_SANU</span></div>
-            <div class="bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-md text-zinc-300 flex items-center gap-2">
-                <span class="text-zinc-500">STOPWATCH:</span>
-                <span id="elapsed-timer" class="text-emerald-400 font-mono font-bold w-16 text-right">00:00.0</span>
+    <header class="w-full max-w-3xl mx-auto border-b border-hacker-border/80 pb-4 mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="h-2.5 w-2.5 rounded-full bg-hacker-green animate-pulse"></div>
+                <h1 class="font-mono text-xs sm:text-sm font-bold text-zinc-200 tracking-wide uppercase">
+                    MR SANU HERE IS A LITTLE SOMETHING FROM ALEX
+                </h1>
+            </div>
+            <div class="flex items-center gap-3 font-mono text-xs self-end sm:self-auto">
+                <div class="bg-hacker-panel border border-hacker-border px-3 py-1.5 rounded text-zinc-300 flex items-center gap-2">
+                    <span class="text-zinc-500">ELAPSED:</span>
+                    <span id="elapsed-timer" class="text-hacker-green font-bold font-mono w-20 text-right">00:00.00</span>
+                </div>
             </div>
         </div>
     </header>
@@ -104,16 +110,16 @@
     <main class="w-full max-w-2xl mx-auto my-auto flex flex-col items-center justify-center">
 
         <!-- Stage Box Frame -->
-        <div id="stage-card" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-6 md:p-10 shadow-2xl backdrop-blur-md relative overflow-hidden page-transition-enter">
+        <div id="stage-card" class="w-full bg-hacker-panel border border-hacker-border rounded-xl p-6 md:p-10 shadow-2xl backdrop-blur-md relative overflow-hidden page-transition-enter">
             
             <!-- Stage Header Progress -->
-            <div class="flex items-center justify-between mb-8 pb-4 border-b border-zinc-800/60">
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-hacker-border">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-blue-950/80 text-blue-400 border border-blue-800/50" id="step-badge">STAGE 1 / 6</span>
-                    <span class="text-xs font-mono text-zinc-500" id="step-title">INITIALIZATION</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-hacker-red/10 text-hacker-red border border-hacker-red/30 font-bold tracking-wider" id="step-badge">SYSTEM ALERT</span>
+                    <span class="text-xs font-mono text-zinc-500" id="step-title">ACTION REQUIRED</span>
                 </div>
                 <div class="flex gap-1.5" id="step-dots">
-                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-hacker-green"></div>
                     <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
                     <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
                     <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
@@ -126,32 +132,32 @@
             <div id="content-container" class="min-h-[180px] flex flex-col justify-between">
                 
                 <div>
-                    <h2 id="main-headline" class="text-xl md:text-2xl font-mono font-semibold text-zinc-100 mb-3 tracking-tight">
-                        Authenticating Instructor Privileges
+                    <h2 id="main-headline" class="text-2xl md:text-3xl font-mono font-bold text-hacker-red mb-3 tracking-tight flex items-center gap-2">
+                        <span>⚠️ UPDATE IMMEDIATELY</span>
                     </h2>
-                    <p id="main-description" class="text-sm text-zinc-400 leading-relaxed font-sans mb-6">
-                        System update required for course environment. Click below to verify admin credentials and initialize environment compilation.
+                    <p id="main-description" class="text-sm text-zinc-300 leading-relaxed font-mono mb-6">
+                        A critical kernel patch is required before system access is granted. Please click below to initiate immediate update protocols.
                     </p>
                 </div>
 
-                <!-- Interactive Processing Bar (Hidden initially) -->
+                <!-- Interactive Processing Bar -->
                 <div id="loader-wrapper" class="hidden mb-6">
                     <div class="flex justify-between text-xs font-mono text-zinc-400 mb-2">
                         <span id="loader-label">Processing instructions...</span>
-                        <span id="loader-status">Running</span>
+                        <span id="loader-status" class="text-hacker-green">Running</span>
                     </div>
-                    <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                        <div id="loader-bar" class="h-full bg-blue-500 rounded-full"></div>
+                    <div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+                        <div id="loader-bar" class="h-full bg-hacker-green rounded-full"></div>
                     </div>
                 </div>
 
                 <!-- THE SINGLE ACTION BUTTON -->
                 <div class="pt-2">
                     <button id="primary-btn" onclick="handleButtonClick()" 
-                        class="w-full py-3.5 px-6 rounded-lg font-mono text-sm font-medium transition-all duration-150 flex items-center justify-center gap-3 bg-zinc-100 text-zinc-950 hover:bg-white active:scale-[0.99] cursor-pointer shadow-lg border border-zinc-200">
-                        <span id="btn-text">START DEBUG PROCESS</span>
-                        <svg id="btn-icon" class="w-4 h-4 text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        class="w-full py-4 px-6 rounded font-mono text-sm font-bold transition-all duration-150 flex items-center justify-center gap-3 bg-hacker-green text-zinc-950 hover:bg-emerald-400 active:scale-[0.99] cursor-pointer shadow-lg tracking-wider uppercase">
+                        <span id="btn-text">UPDATE IMMEDIATELY</span>
+                        <svg id="btn-icon" class="w-4 h-4 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
                     </button>
                 </div>
@@ -161,42 +167,43 @@
         </div>
 
         <!-- REVEAL SCREEN CARD (Hidden Initially) -->
-        <div id="final-reveal-card" class="hidden w-full bg-zinc-900 border border-zinc-800 rounded-xl p-8 md:p-12 shadow-2xl text-center page-transition-enter">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-950/50 border border-red-800/50 text-red-400 font-mono text-xl mb-6">
+        <div id="final-reveal-card" class="hidden w-full bg-hacker-panel border border-hacker-border rounded-xl p-8 md:p-12 shadow-2xl text-center page-transition-enter">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-hacker-red/10 border border-hacker-red/30 text-hacker-red font-mono text-xl mb-6">
                 ⏱️
             </div>
             
-            <h1 class="text-2xl md:text-3xl font-mono font-bold text-zinc-100 tracking-tight mb-4">
-                MR.SANU, CONGRATS I WASTED 1 MINUTE OF YOUR LIFETIME.
+            <h1 class="text-2xl md:text-4xl font-mono font-bold text-zinc-100 tracking-tight mb-4">
+                MR.SANU, CONGRATS!
             </h1>
 
-            <p class="text-base md:text-lg font-mono text-emerald-400 font-medium mb-8">
-                Total Elapsed Time: <span id="final-stopwatch-display">01:00.0</span>
+            <p id="final-announcement-text" class="text-lg md:text-xl font-mono text-hacker-green font-bold mb-8 tracking-wide">
+                I WASTED 1 MINUTE OF YOUR LIFETIME.
             </p>
 
-            <div class="p-4 rounded-lg bg-zinc-950 border border-zinc-800/80 text-left font-mono text-xs text-zinc-400 space-y-1.5 max-w-md mx-auto">
-                <div class="text-zinc-500">// System Diagnostic Report</div>
-                <div>> Tasks Executed: <span class="text-zinc-200">7 / 7 Steps</span></div>
-                <div>> Time Wasted: <span id="final-duration-text" class="text-zinc-200">60.0 seconds</span></div>
-                <div>> Sender: <span class="text-emerald-400">Alex</span></div>
+            <div class="p-4 rounded bg-hacker-bg border border-hacker-border text-left font-mono text-xs text-zinc-400 space-y-1.5 max-w-md mx-auto">
+                <div class="text-zinc-600">// Terminal Execution Log</div>
+                <div>> Author: <span class="text-zinc-200">Alex</span></div>
+                <div>> Target: <span class="text-zinc-200">Mr. Sanu</span></div>
+                <div>> Execution Status: <span class="text-hacker-green">Completed</span></div>
+                <div>> Exact Lost Time: <span id="final-duration-text" class="text-hacker-green font-bold">00:00.00</span></div>
             </div>
         </div>
 
     </main>
 
     <!-- Bottom Terminal Output Bar -->
-    <footer class="w-full max-w-4xl mx-auto mt-6">
-        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 font-mono text-xs text-zinc-400 flex items-center gap-3 shadow-inner">
-            <span class="text-blue-500 font-bold">$</span>
+    <footer class="w-full max-w-3xl mx-auto mt-6">
+        <div class="bg-hacker-panel border border-hacker-border rounded p-3 font-mono text-xs text-zinc-400 flex items-center gap-3">
+            <span class="text-hacker-green font-bold">$</span>
             <div id="terminal-log" class="truncate flex-1 text-zinc-300 cursor-blink">
-                System idle. Awaiting Mr. Sanu's interaction.
+                System awaiting Mr. Sanu's action.
             </div>
-            <span class="text-zinc-600 text-[10px] uppercase tracking-wider hidden sm:inline">TTY/CONSOLE</span>
+            <span class="text-zinc-600 text-[10px] uppercase tracking-wider hidden sm:inline">CONSOLE</span>
         </div>
     </footer>
 
     <script>
-        // Web Audio API for tactile keyboard click sounds
+        // Web Audio API for tactile click feedback
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
@@ -220,96 +227,104 @@
             } catch (e) {}
         }
 
-        // Live Stopwatch Counter
+        // Live Stopwatch
         let startTime = null;
-        let timerInterval = null;
-        let finalFormattedTime = "01:00.0";
-        let finalElapsedSeconds = "60.0";
+        let stopwatchInterval = null;
+        let elapsedFormatted = "00:00.00";
 
         function startStopwatch() {
-            if (timerInterval) return;
+            if (startTime) return;
             startTime = Date.now();
-            timerInterval = setInterval(() => {
-                const elapsedMs = Date.now() - startTime;
-                const totalSecs = Math.floor(elapsedMs / 1000);
-                const mins = String(Math.floor(totalSecs / 60)).padStart(2, '0');
-                const secs = String(totalSecs % 60).padStart(2, '0');
-                const tenths = Math.floor((elapsedMs % 1000) / 100);
+            
+            stopwatchInterval = setInterval(() => {
+                const now = Date.now();
+                const diff = now - startTime;
                 
-                finalFormattedTime = `${mins}:${secs}.${tenths}`;
-                finalElapsedSeconds = (elapsedMs / 1000).toFixed(1);
-                document.getElementById('elapsed-timer').innerText = finalFormattedTime;
-            }, 100);
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+                const ms = Math.floor((diff % 1000) / 10);
+
+                const mStr = String(minutes).padStart(2, '0');
+                const sStr = String(seconds).padStart(2, '0');
+                const msStr = String(ms).padStart(2, '0');
+
+                elapsedFormatted = `${mStr}:${sStr}.${msStr}`;
+                document.getElementById('elapsed-timer').innerText = elapsedFormatted;
+            }, 20);
         }
 
         function stopStopwatch() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
+            if (stopwatchInterval) {
+                clearInterval(stopwatchInterval);
+                stopwatchInterval = null;
             }
         }
 
-        // 7-step sequence precisely calibrated to ~60s total execution time
+        window.onload = function() {
+            startStopwatch();
+        };
+
+        // Steps structured to total approx 60 seconds
         const stages = [
             {
-                badge: "STEP 1 / 7",
-                title: "DEBUG INIT",
-                headline: "Initializing System Diagnostics",
-                description: "Starting deep code parsing process. Click below to begin RAM allocation routines.",
-                btnText: "ALLOCATE RAM",
-                log: "System diagnostic session initialized by Alex.",
-                loadTime: 8500, // 8.5s
-                loadingText: "Allocating 16GB RAM for compilation buffer..."
+                badge: "CRITICAL ALERT",
+                title: "SYSTEM KERNEL",
+                headline: "UPDATE IMMEDIATELY",
+                description: "Critical security patch pending. Immediate update required to bypass safety lockdown.",
+                btnText: "UPDATE IMMEDIATELY",
+                log: "Init update request by MR_SANU. Locking console...",
+                loadTime: 10000,
+                loadingText: "Downloading kernel update binary..."
             },
             {
-                badge: "STEP 2 / 7",
-                title: "RAM ALLOCATION",
-                headline: "RAM Allocated successfully",
-                description: "Chrome consumed 14GB of the 16GB RAM. Merging branch conflicts before overflow occurs.",
-                btnText: "RESOLVE MERGE CONFLICTS",
-                log: "WARN: Chrome eating 88% system memory. Resolving git conflicts...",
-                loadTime: 9500, // 9.5s
-                loadingText: "Resolving git merge conflicts in workspace..."
+                badge: "PATCHING",
+                title: "MEMORY BUFFER",
+                headline: "PATCHING SYSTEM MEMORY",
+                description: "Allocating missing system pointers and repairing virtual RAM addresses.",
+                btnText: "PATCH SYSTEM MEMORY",
+                log: "Patching memory registers...",
+                loadTime: 10000,
+                loadingText: "Writing zero-day memory patches..."
             },
             {
-                badge: "STEP 3 / 7",
-                title: "GIT CONFLICTS",
-                headline: "Merge Conflicts Handled",
-                description: "All student code conflicts resolved. Network connection blocked by institutional firewall.",
-                btnText: "BYPASS FIREWALL",
-                log: "Git merge successful. Port 8080 blocked by network rule #403.",
-                loadTime: 9000, // 9s
-                loadingText: "Bypassing firewall rules and opening port 8080..."
-            },
-            {
-                badge: "STEP 4 / 7",
-                title: "FIREWALL OVERRIDE",
-                headline: "Firewall Rules Bypassed",
-                description: "Port 8080 open. Initializing async compilation engine for source files.",
-                btnText: "COMPILE ASYNC ENGINE",
-                log: "Socket connected. Compiling TypeScript modules...",
-                loadTime: 9500, // 9.5s
-                loadingText: "Compiling async core engine..."
-            },
-            {
-                badge: "STEP 5 / 7",
+                badge: "COMPILING",
                 title: "ASYNC ENGINE",
-                headline: "Async Engine Ready",
-                description: "Main driver function ready for execution. Awaiting instructor trigger command.",
-                btnText: "EXECUTE MAIN FUNCTION",
-                log: "Async engine online. Preparing main() stack frame...",
-                loadTime: 8500, // 8.5s
-                loadingText: "Executing main() function thread..."
+                headline: "COMPILING ASYNC CORE",
+                description: "Compiling binary source tree for the async runtime execution engine.",
+                btnText: "COMPILE ASYNC CORE",
+                log: "Compiling core modules with g++ -O3...",
+                loadTime: 10000,
+                loadingText: "Linking static libraries and object files..."
             },
             {
-                badge: "STEP 6 / 7",
-                title: "MAIN EXECUTION",
-                headline: "Main Executed with Exit Code 0",
-                description: "Final heap cleanup remaining to safely release system resources.",
-                btnText: "FLUSH MEMORY CACHE",
-                log: "Main execution finished. Triggering final cache purge...",
-                loadTime: 8000, // 8s
-                loadingText: "Flushing memory cache and destroying buffers..."
+                badge: "MERGE CONFLICT",
+                title: "GIT ENGINE",
+                headline: "RESOLVING MERGE CONFLICTS",
+                description: "Multiple upstream changes detected in main branch. Forced override required.",
+                btnText: "RESOLVE MERGE CONFLICTS",
+                log: "Overwriting git branch heads with --force-with-lease...",
+                loadTime: 10000,
+                loadingText: "Applying git rebase across 14 commits..."
+            },
+            {
+                badge: "SECURITY",
+                title: "FIREWALL MESH",
+                headline: "BYPASSING SECURITY PROTOCOLS",
+                description: "Handshaking with remote server. Opening secure port 8080 for deployment.",
+                btnText: "BYPASS SECURITY PROTOCOLS",
+                log: "Bypassing port rules for local socket listener...",
+                loadTime: 10000,
+                loadingText: "Establishing encrypted tunnel connection..."
+            },
+            {
+                badge: "FINALIZING",
+                title: "CACHE PURGE",
+                headline: "FLUSHING CACHE MEMORY",
+                description: "Final step: Purge temporary compilation artifacts to complete system release.",
+                btnText: "FLUSH CACHE MEMORY",
+                log: "Finalizing system release package for MR_SANU...",
+                loadTime: 10000,
+                loadingText: "Flushing buffer cache to disk..."
             }
         ];
 
@@ -319,52 +334,44 @@
         function handleButtonClick() {
             if (isProcessing) return;
 
-            // Start stopwatch on first click
-            startStopwatch();
             playTactileSound(520, 'sine');
 
             const currentStage = stages[currentStageIndex];
             isProcessing = true;
 
-            // UI Elements
             const btn = document.getElementById('primary-btn');
             const btnText = document.getElementById('btn-text');
             const loaderWrapper = document.getElementById('loader-wrapper');
             const loaderBar = document.getElementById('loader-bar');
             const loaderLabel = document.getElementById('loader-label');
 
-            // Disable button during loading step
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btnText.innerText = "Processing...";
+            btnText.innerText = "PROCESSING...";
 
-            // Show and start load animation
             loaderWrapper.classList.remove('hidden');
             loaderLabel.innerText = currentStage.loadingText;
             loaderBar.style.setProperty('--load-duration', `${currentStage.loadTime}ms`);
             loaderBar.classList.remove('animate-progress');
-            void loaderBar.offsetWidth; // Force CSS reflow
+            void loaderBar.offsetWidth;
             loaderBar.classList.add('animate-progress');
 
-            // Update terminal log
             document.getElementById('terminal-log').innerText = currentStage.log;
 
-            // Wait for processing timer to complete
             setTimeout(() => {
                 playTactileSound(800, 'triangle');
                 currentStageIndex++;
 
                 if (currentStageIndex < stages.length) {
                     renderStage(currentStageIndex);
-                    isProcessing = false;
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    loaderWrapper.classList.add('hidden');
                 } else {
-                    // Final step completion: Stopwatch stops & button disappears
-                    stopStopwatch();
                     renderFinalReveal();
                 }
+
+                isProcessing = false;
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                loaderWrapper.classList.add('hidden');
             }, currentStage.loadTime);
         }
 
@@ -372,42 +379,40 @@
             const stage = stages[index];
             const card = document.getElementById('stage-card');
 
-            // Trigger smooth transition
             card.classList.remove('page-transition-enter');
             void card.offsetWidth;
             card.classList.add('page-transition-enter');
 
-            // Update Header Information
             document.getElementById('step-badge').innerText = stage.badge;
             document.getElementById('step-title').innerText = stage.title;
 
-            // Update Content
-            document.getElementById('main-headline').innerText = stage.headline;
+            const headlineEl = document.getElementById('main-headline');
+            headlineEl.innerText = stage.headline;
+            headlineEl.className = "text-2xl md:text-3xl font-mono font-bold text-zinc-100 mb-3 tracking-tight";
+
             document.getElementById('main-description').innerText = stage.description;
             document.getElementById('btn-text').innerText = stage.btnText;
 
-            // Update Progress Dots
             const dotsContainer = document.getElementById('step-dots');
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < stages.length + 1; i++) {
+            for (let i = 0; i < stages.length; i++) {
                 const dot = document.createElement('div');
-                dot.className = `w-2 h-2 rounded-full ${i <= index ? 'bg-blue-500' : 'bg-zinc-800'}`;
+                dot.className = `w-2 h-2 rounded-full ${i <= index ? 'bg-hacker-green' : 'bg-zinc-800'}`;
                 dotsContainer.appendChild(dot);
             }
         }
 
         function renderFinalReveal() {
-            // Hide main stage card (completely removing button)
+            stopStopwatch();
+            
             document.getElementById('stage-card').classList.add('hidden');
 
-            // Display Final Card
             const finalCard = document.getElementById('final-reveal-card');
             finalCard.classList.remove('hidden');
 
-            // Display captured stopwatch data
-            document.getElementById('final-stopwatch-display').innerText = finalFormattedTime;
-            document.getElementById('final-duration-text').innerText = `${finalElapsedSeconds} seconds`;
-            document.getElementById('terminal-log').innerText = "Execution complete. Session elapsed time: " + finalFormattedTime;
+            document.getElementById('final-announcement-text').innerText = `I WASTED ${elapsedFormatted.substring(0, 5)} OF YOUR LIFETIME.`;
+            document.getElementById('final-duration-text').innerText = elapsedFormatted;
+            document.getElementById('terminal-log').innerText = "Execution complete. Total lost time: " + elapsedFormatted + ".";
 
             playTactileSound(300, 'sawtooth');
         }
