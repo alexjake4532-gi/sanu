@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Diagnosis & Verification - Mr. Sanu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            850: '#151518',
+                            950: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts for Clean Tech Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+        }
+
+        /* Subtle scanline grid background pattern */
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Smooth card slide-in transitions */
+        .page-transition-enter {
+            animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Monospace blinking cursor */
+        .cursor-blink::after {
+            content: '▎';
+            animation: blink 1s step-start infinite;
+            color: #3b82f6;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Precision loader animation */
+        @keyframes lineProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .animate-progress {
+            animation: lineProgress var(--load-duration, 8s) ease-in-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100 bg-grid-pattern flex flex-col justify-between p-4 md:p-8 select-none overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between border-b border-zinc-800/80 pb-4 mb-6 gap-3">
+        <div class="flex items-center gap-3">
+            <div class="h-3 w-3 rounded-full bg-emerald-500/80 animate-pulse"></div>
+            <span class="font-mono text-xs font-bold text-emerald-400 tracking-wider uppercase">MR SANU HERE IS A LITTLE SOMETHING FROM ALEX</span>
+        </div>
+        <div class="flex items-center gap-4 font-mono text-xs">
+            <div class="text-zinc-500">TARGET: <span class="text-zinc-200 font-medium">MR_SANU</span></div>
+            <div class="bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-md text-zinc-300 flex items-center gap-2">
+                <span class="text-zinc-500">STOPWATCH:</span>
+                <span id="elapsed-timer" class="text-emerald-400 font-mono font-bold w-16 text-right">00:00.0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Workspace -->
+    <main class="w-full max-w-2xl mx-auto my-auto flex flex-col items-center justify-center">
+
+        <!-- Stage Box Frame -->
+        <div id="stage-card" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl p-6 md:p-10 shadow-2xl backdrop-blur-md relative overflow-hidden page-transition-enter">
+            
+            <!-- Stage Header Progress -->
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-zinc-800/60">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-blue-950/80 text-blue-400 border border-blue-800/50" id="step-badge">STAGE 1 / 6</span>
+                    <span class="text-xs font-mono text-zinc-500" id="step-title">INITIALIZATION</span>
+                </div>
+                <div class="flex gap-1.5" id="step-dots">
+                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
+                    <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
+                    <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
+                    <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
+                    <div class="w-2 h-2 rounded-full bg-zinc-800"></div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="content-container" class="min-h-[180px] flex flex-col justify-between">
+                
+                <div>
+                    <h2 id="main-headline" class="text-xl md:text-2xl font-mono font-semibold text-zinc-100 mb-3 tracking-tight">
+                        Authenticating Instructor Privileges
+                    </h2>
+                    <p id="main-description" class="text-sm text-zinc-400 leading-relaxed font-sans mb-6">
+                        System update required for course environment. Click below to verify admin credentials and initialize environment compilation.
+                    </p>
+                </div>
+
+                <!-- Interactive Processing Bar (Hidden initially) -->
+                <div id="loader-wrapper" class="hidden mb-6">
+                    <div class="flex justify-between text-xs font-mono text-zinc-400 mb-2">
+                        <span id="loader-label">Processing instructions...</span>
+                        <span id="loader-status">Running</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                        <div id="loader-bar" class="h-full bg-blue-500 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- THE SINGLE ACTION BUTTON -->
+                <div class="pt-2">
+                    <button id="primary-btn" onclick="handleButtonClick()" 
+                        class="w-full py-3.5 px-6 rounded-lg font-mono text-sm font-medium transition-all duration-150 flex items-center justify-center gap-3 bg-zinc-100 text-zinc-950 hover:bg-white active:scale-[0.99] cursor-pointer shadow-lg border border-zinc-200">
+                        <span id="btn-text">START DEBUG PROCESS</span>
+                        <svg id="btn-icon" class="w-4 h-4 text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- REVEAL SCREEN CARD (Hidden Initially) -->
+        <div id="final-reveal-card" class="hidden w-full bg-zinc-900 border border-zinc-800 rounded-xl p-8 md:p-12 shadow-2xl text-center page-transition-enter">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-950/50 border border-red-800/50 text-red-400 font-mono text-xl mb-6">
+                ⏱️
+            </div>
+            
+            <h1 class="text-2xl md:text-3xl font-mono font-bold text-zinc-100 tracking-tight mb-4">
+                MR.SANU, CONGRATS I WASTED 1 MINUTE OF YOUR LIFETIME.
+            </h1>
+
+            <p class="text-base md:text-lg font-mono text-emerald-400 font-medium mb-8">
+                Total Elapsed Time: <span id="final-stopwatch-display">01:00.0</span>
+            </p>
+
+            <div class="p-4 rounded-lg bg-zinc-950 border border-zinc-800/80 text-left font-mono text-xs text-zinc-400 space-y-1.5 max-w-md mx-auto">
+                <div class="text-zinc-500">// System Diagnostic Report</div>
+                <div>> Tasks Executed: <span class="text-zinc-200">7 / 7 Steps</span></div>
+                <div>> Time Wasted: <span id="final-duration-text" class="text-zinc-200">60.0 seconds</span></div>
+                <div>> Sender: <span class="text-emerald-400">Alex</span></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Terminal Output Bar -->
+    <footer class="w-full max-w-4xl mx-auto mt-6">
+        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 font-mono text-xs text-zinc-400 flex items-center gap-3 shadow-inner">
+            <span class="text-blue-500 font-bold">$</span>
+            <div id="terminal-log" class="truncate flex-1 text-zinc-300 cursor-blink">
+                System idle. Awaiting Mr. Sanu's interaction.
+            </div>
+            <span class="text-zinc-600 text-[10px] uppercase tracking-wider hidden sm:inline">TTY/CONSOLE</span>
+        </div>
+    </footer>
+
+    <script>
+        // Web Audio API for tactile keyboard click sounds
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playTactileSound(freq = 400, type = 'sine') {
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch (e) {}
+        }
+
+        // Live Stopwatch Counter
+        let startTime = null;
+        let timerInterval = null;
+        let finalFormattedTime = "01:00.0";
+        let finalElapsedSeconds = "60.0";
+
+        function startStopwatch() {
+            if (timerInterval) return;
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsedMs = Date.now() - startTime;
+                const totalSecs = Math.floor(elapsedMs / 1000);
+                const mins = String(Math.floor(totalSecs / 60)).padStart(2, '0');
+                const secs = String(totalSecs % 60).padStart(2, '0');
+                const tenths = Math.floor((elapsedMs % 1000) / 100);
+                
+                finalFormattedTime = `${mins}:${secs}.${tenths}`;
+                finalElapsedSeconds = (elapsedMs / 1000).toFixed(1);
+                document.getElementById('elapsed-timer').innerText = finalFormattedTime;
+            }, 100);
+        }
+
+        function stopStopwatch() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        // 7-step sequence precisely calibrated to ~60s total execution time
+        const stages = [
+            {
+                badge: "STEP 1 / 7",
+                title: "DEBUG INIT",
+                headline: "Initializing System Diagnostics",
+                description: "Starting deep code parsing process. Click below to begin RAM allocation routines.",
+                btnText: "ALLOCATE RAM",
+                log: "System diagnostic session initialized by Alex.",
+                loadTime: 8500, // 8.5s
+                loadingText: "Allocating 16GB RAM for compilation buffer..."
+            },
+            {
+                badge: "STEP 2 / 7",
+                title: "RAM ALLOCATION",
+                headline: "RAM Allocated successfully",
+                description: "Chrome consumed 14GB of the 16GB RAM. Merging branch conflicts before overflow occurs.",
+                btnText: "RESOLVE MERGE CONFLICTS",
+                log: "WARN: Chrome eating 88% system memory. Resolving git conflicts...",
+                loadTime: 9500, // 9.5s
+                loadingText: "Resolving git merge conflicts in workspace..."
+            },
+            {
+                badge: "STEP 3 / 7",
+                title: "GIT CONFLICTS",
+                headline: "Merge Conflicts Handled",
+                description: "All student code conflicts resolved. Network connection blocked by institutional firewall.",
+                btnText: "BYPASS FIREWALL",
+                log: "Git merge successful. Port 8080 blocked by network rule #403.",
+                loadTime: 9000, // 9s
+                loadingText: "Bypassing firewall rules and opening port 8080..."
+            },
+            {
+                badge: "STEP 4 / 7",
+                title: "FIREWALL OVERRIDE",
+                headline: "Firewall Rules Bypassed",
+                description: "Port 8080 open. Initializing async compilation engine for source files.",
+                btnText: "COMPILE ASYNC ENGINE",
+                log: "Socket connected. Compiling TypeScript modules...",
+                loadTime: 9500, // 9.5s
+                loadingText: "Compiling async core engine..."
+            },
+            {
+                badge: "STEP 5 / 7",
+                title: "ASYNC ENGINE",
+                headline: "Async Engine Ready",
+                description: "Main driver function ready for execution. Awaiting instructor trigger command.",
+                btnText: "EXECUTE MAIN FUNCTION",
+                log: "Async engine online. Preparing main() stack frame...",
+                loadTime: 8500, // 8.5s
+                loadingText: "Executing main() function thread..."
+            },
+            {
+                badge: "STEP 6 / 7",
+                title: "MAIN EXECUTION",
+                headline: "Main Executed with Exit Code 0",
+                description: "Final heap cleanup remaining to safely release system resources.",
+                btnText: "FLUSH MEMORY CACHE",
+                log: "Main execution finished. Triggering final cache purge...",
+                loadTime: 8000, // 8s
+                loadingText: "Flushing memory cache and destroying buffers..."
+            }
+        ];
+
+        let currentStageIndex = 0;
+        let isProcessing = false;
+
+        function handleButtonClick() {
+            if (isProcessing) return;
+
+            // Start stopwatch on first click
+            startStopwatch();
+            playTactileSound(520, 'sine');
+
+            const currentStage = stages[currentStageIndex];
+            isProcessing = true;
+
+            // UI Elements
+            const btn = document.getElementById('primary-btn');
+            const btnText = document.getElementById('btn-text');
+            const loaderWrapper = document.getElementById('loader-wrapper');
+            const loaderBar = document.getElementById('loader-bar');
+            const loaderLabel = document.getElementById('loader-label');
+
+            // Disable button during loading step
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btnText.innerText = "Processing...";
+
+            // Show and start load animation
+            loaderWrapper.classList.remove('hidden');
+            loaderLabel.innerText = currentStage.loadingText;
+            loaderBar.style.setProperty('--load-duration', `${currentStage.loadTime}ms`);
+            loaderBar.classList.remove('animate-progress');
+            void loaderBar.offsetWidth; // Force CSS reflow
+            loaderBar.classList.add('animate-progress');
+
+            // Update terminal log
+            document.getElementById('terminal-log').innerText = currentStage.log;
+
+            // Wait for processing timer to complete
+            setTimeout(() => {
+                playTactileSound(800, 'triangle');
+                currentStageIndex++;
+
+                if (currentStageIndex < stages.length) {
+                    renderStage(currentStageIndex);
+                    isProcessing = false;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    loaderWrapper.classList.add('hidden');
+                } else {
+                    // Final step completion: Stopwatch stops & button disappears
+                    stopStopwatch();
+                    renderFinalReveal();
+                }
+            }, currentStage.loadTime);
+        }
+
+        function renderStage(index) {
+            const stage = stages[index];
+            const card = document.getElementById('stage-card');
+
+            // Trigger smooth transition
+            card.classList.remove('page-transition-enter');
+            void card.offsetWidth;
+            card.classList.add('page-transition-enter');
+
+            // Update Header Information
+            document.getElementById('step-badge').innerText = stage.badge;
+            document.getElementById('step-title').innerText = stage.title;
+
+            // Update Content
+            document.getElementById('main-headline').innerText = stage.headline;
+            document.getElementById('main-description').innerText = stage.description;
+            document.getElementById('btn-text').innerText = stage.btnText;
+
+            // Update Progress Dots
+            const dotsContainer = document.getElementById('step-dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < stages.length + 1; i++) {
+                const dot = document.createElement('div');
+                dot.className = `w-2 h-2 rounded-full ${i <= index ? 'bg-blue-500' : 'bg-zinc-800'}`;
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function renderFinalReveal() {
+            // Hide main stage card (completely removing button)
+            document.getElementById('stage-card').classList.add('hidden');
+
+            // Display Final Card
+            const finalCard = document.getElementById('final-reveal-card');
+            finalCard.classList.remove('hidden');
+
+            // Display captured stopwatch data
+            document.getElementById('final-stopwatch-display').innerText = finalFormattedTime;
+            document.getElementById('final-duration-text').innerText = `${finalElapsedSeconds} seconds`;
+            document.getElementById('terminal-log').innerText = "Execution complete. Session elapsed time: " + finalFormattedTime;
+
+            playTactileSound(300, 'sawtooth');
+        }
+    </script>
+</body>
+</html>
